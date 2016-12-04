@@ -36,6 +36,17 @@
 #define ACMTR_SCL  PC5
 
 
+//quote from atmega88 datasheet
+/*"If any ADC [3..0] port pins are used as digital outputs,
+it is essential that these do not switch while a conversion is in progress.
+However, using the 2-wire Interface (ADC4 and ADC5) will only affect
+the conversion on ADC4 and ADC5 and not the other ADC channels"
+*/
+
+
+//note to LSM303D we will be using interrupts from X and Y axis sources
+// X axis - fron/rear
+// y axis -left/right
 typedef enum {left,forward,backward,right} directions;
 
 void init_io(void) {

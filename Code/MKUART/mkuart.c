@@ -60,7 +60,7 @@ void USART_Init( uint16_t baud ) {
 // procedura obs³ugi przerwania Tx Complete, gdy zostanie opó¿niony UDR
 // kompilacja gdy u¿ywamy RS485
 #ifdef UART_DE_PORT
-ISR( USART_TXC_vect ) {
+ISR( USART_TX_vect ) {
   UART_DE_PORT &= ~UART_DE_BIT;	// zablokuj nadajnik RS485
 }
 #endif
