@@ -101,3 +101,9 @@ int main() {
 
 		}
 }
+
+
+ISR(BADISR_vect)
+{
+
+}
