@@ -31,7 +31,7 @@ volatile uint8_t UART_TxTail; // indeks oznaczaj¹cy „ogon wê¿a”
 
 
 
-void USART_Init( uint16_t baud ) {
+void USART_Init( uint32_t baud ) {
 	/* Ustawienie prêdkoœci */
 	UBRR0H = (uint8_t)(baud>>8);
 	UBRR0L = (uint8_t)baud;

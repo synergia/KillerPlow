@@ -9,7 +9,7 @@
 #define MKUART_H_
 
 
-#define UART_BAUD 115200UL		// tu definiujemy interesuj¹c¹ nas prêdkoœæ
+#define UART_BAUD 57600UL		// tu definiujemy interesuj¹c¹ nas prêdkoœæ
 #define F_CPU 20000000UL
 #define __UBRR F_CPU/16/UART_BAUD-1  // obliczamy UBRR dla U2X=0
 
@@ -35,7 +35,7 @@
 
 // deklaracje funkcji publicznych
 
-void USART_Init( uint16_t baud );
+void USART_Init( uint32_t baud );
 
 char uart_getc(void);
 void uart_putc( char data );

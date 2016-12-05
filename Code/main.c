@@ -7,6 +7,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <avr/pgmspace.h>
 #include "MKUART/mkuart.h"
 //#include "I2C_TWI/i2c_twi.h"
 //Sharp's left/forward/right
@@ -54,6 +55,83 @@ the conversion on ADC4 and ADC5 and not the other ADC channels"
 // y axis -left/right
 typedef enum {left,forward,backward,right} directions;
 
+
+void init_io(void);
+void motor_soft_start(int mot_a, int mot_b);
+void set_motors_dir(directions dir);
+void set_motors_vel(int vel_L, int vel_R);
+void adc_init();
+
+uint8_t PROGMEM adc_mul[]={0b01000000,0b01000001,0b01000010,0b01000111};
+volatile uint16_t tccrt[4];
+
+int main() {
+	init_io();
+	USART_Init( __UBRR );
+	adc_init();
+	sei();
+	uint8_t inc;
+	while (1) {
+		LED_ON;
+		inc++;
+		ADCSRA|=(1<<ADSC);
+		_delay_ms(100);
+		LED_OFF;
+
+		_delay_ms(50);
+
+		uart_puts("\033[2J");   // clear screen
+		uart_puts("\033[0;0H"); // set cursor to 0,0
+		uart_putint(inc,10);
+		for(uint8_t j=0;j<=3;++j){
+			uart_puts("TCCRTN:   ");
+			uart_putint(tccrt[j],10);
+			uart_puts("    \r\n");
+			uart_putint(j,10);
+			uart_puts("\r\n");
+
+		}
+
+
+	}
+
+
+}
+
+
+ISR(PCINT0_vect){
+//sharp 1 2
+}
+
+ISR(PCINT2_vect){
+//sharp 3
+}
+
+
+ISR(BADISR_vect)
+{
+
+}
+
+ISR(ADC_vect){
+	static uint8_t k;
+	tccrt[k]=ADC;
+	_delay_us(50);
+//	ADMUX = adc_mul[k];
+	++k;
+	if (k>=4)k=0;
+
+}
+
+void adc_init(){
+//	ADCSRA |=
+//pres = 128 , interrupt enable enable
+	ADCSRA |=(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0)|(1<<ADCSRA);
+	ADCSRA |=(1<<ADEN)|(1<<ADIE);//ADSC
+	ADMUX |= (1<<REFS0);
+}
+
+
 void init_io(void) {
 
 	DDRB = 0b00100111;
@@ -98,39 +176,5 @@ void set_motors_dir(directions dir){
  * Setting motors velocity
  */
 void set_motors_vel(int vel_L, int vel_R){
-
-}
-
-
-
-int main() {
-	init_io();
-	USART_Init( __UBRR );
-	sei();
-	while (1) {
-		LED_ON;
-		_delay_ms(500);
-		LED_OFF;
-		_delay_ms(500);
-		uart_puts("HELLO");
-	}
-
-
-}
-
-
-ISR(PCINT0_vect){
-
-}
-ISR(PCINT1_vect){
-
-}
-ISR(PCINT2_vect){
-
-}
-
-
-ISR(BADISR_vect)
-{
 
 }
