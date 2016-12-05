@@ -53,7 +53,7 @@ void USART_Init( uint16_t baud ) {
 		UCSR0B |= (1<<RXEN0)|(1<<TXEN0)|(1<<RXCIE0)|(1<<TXCIE0);
 	#else
 		// jeœli nie  korzystamy z interefejsu RS485
-		UCSRB |= (1<<RXEN)|(1<<TXEN)|(1<<RXCIE);
+		UCSR0B |= (1<<RXEN0)|(1<<TXEN0)|(1<<RXCIE0);
 	#endif
 }
 
