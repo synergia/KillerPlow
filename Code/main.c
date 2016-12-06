@@ -62,8 +62,8 @@ void set_motors_dir(directions dir);
 void set_motors_vel(int vel_L, int vel_R);
 void adc_init();
 
-uint8_t PROGMEM adc_mul[]={0b01000000,0b01000001,0b01000010,0b01000111};
-volatile uint16_t tccrt[4];
+uint8_t adc_mul[]={0b01000000,0b01000001,0b01000010,0b01000111,0b01000110};
+volatile uint16_t tccrt[5];
 
 int main() {
 	init_io();
@@ -75,10 +75,10 @@ int main() {
 		LED_ON;
 		inc++;
 		ADCSRA|=(1<<ADSC);
-		_delay_ms(100);
-		LED_OFF;
+		//_delay_ms(100);
+		//LED_OFF;
 
-		_delay_ms(50);
+		//_delay_ms(50);
 
 		uart_puts("\033[2J");   // clear screen
 		uart_puts("\033[0;0H"); // set cursor to 0,0
@@ -89,9 +89,10 @@ int main() {
 			uart_puts("    \r\n");
 			uart_putint(j,10);
 			uart_puts("\r\n");
-
 		}
-
+		uart_puts("SWITCH:   ");
+		uart_putint(tccrt[4],10);
+		uart_puts("    \r\n");
 
 	}
 
@@ -114,12 +115,15 @@ ISR(BADISR_vect)
 }
 
 ISR(ADC_vect){
-	static uint8_t k;
+	static volatile uint8_t k;
 	tccrt[k]=ADC;
-	_delay_us(50);
-//	ADMUX = adc_mul[k];
+	ADMUX = adc_mul[k];
+//	uart_puts("\n\r");
+//	uart_putint(adc_mul[k],10);
+//	uart_puts("\n\r");
 	++k;
-	if (k>=4)k=0;
+	if (k>=5){ k=0; }//set admux to read switch
+	_delay_us(250); // in most cases not needed ( there must be 1 ADC clock gap between ADMUX update and ADSC
 
 }
 
