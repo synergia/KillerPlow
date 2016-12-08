@@ -9,51 +9,10 @@
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include "MKUART/mkuart.h"
+#include "defines.h"
+#include "moves.h"
 //#include "I2C_TWI/i2c_twi.h"
-//Sharp's left/forward/right
-#define SH_L (1<<PB3)
-#define SH_F (1<<PB4)
-#define SH_R (1<<PD4)
 
-#define F_CPU 20000000UL
-//TCRT's
-#define TCRT1 (1<<PC0)
-#define TCRT2 (1<<PC1)
-#define TCRT3 (1<<PC2)
-#define TCRT4 (1<<ADC7) //needed to set multiplexer
-
-#define wb_treshold 500
-
-//H_Bridges M_ == MOTOR Left/Right A/B
-#define M_LA (1<<PB0)
-#define M_LB (1<<PD7)
-#define M_LA_ON PORTB &= ~M_RA
-#define M_LA_OFF PORTB |= M_RA
-#define M_LB_ON PORTD &= ~M_RB
-#define M_LB_OFF PORTD |= M_RB
-
-#define M_RA (1<<PD5) //upper connector - closer to the mosfet
-#define M_RB (1<<PD6)
-#define M_RA_ON PORTD &= ~M_RA
-#define M_RA_OFF PORTD |= M_RA
-#define M_RB_ON PORTD &= ~M_RB
-#define M_RB_OFF PORTD |= M_RB
-
-//PWM's left/right
-#define PWM_L (1<<PB1)
-#define PWM_R (1<<PB2)
-#define PWM_R_ON PORTB &= ~PWM_R
-#define PWM_R_OFF PORTB |= PWM_R
-
-//Accelerometer
-#define ACMTR_INT1 (1<<PD3)
-#define ACMTR_INT2 (1<<PD2)
-#define ACMTR_SDA  (1<<PC4)
-#define ACMTR_SCL  (1<<PC5)
-
-#define LED_PIN (1<<PB5)
-#define LED_ON PORTB &= ~LED_PIN
-#define LED_OFF PORTB |= LED_PIN
 
 //quote from atmega88 datasheet
 /*"If any ADC [3..0] port pins are used as digital outputs,
@@ -65,51 +24,47 @@
 //note to LSM303D we will be using interrupts from X and Y axis sources
 // X axis - fron/rear
 // y axis -left/right
-typedef enum {
-	left, forward, backward, right
-} directions;
+
 
 void init_io(void);
-void motor_soft_start(int mot_a, int mot_b);
-void set_motors_dir(directions dir);
-void set_motors_vel(int vel_L, int vel_R);
+void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val,
+		int MB_end_val);
+
 void adc_init();
 uint8_t edge_detect();
 uint8_t sw_pressed();
-uint8_t adc_mul[] =
-		{ 0b01000000, 0b01000001, 0b01000010, 0b01000111, 0b01000110 };
+void pwm_init();
+uint8_t adc_mul[] = { 0b01000000, 0b01000001, 0b01000010, 0b01000111,
+		0b01000110 };
 volatile uint16_t tccrt[5];
 
 int main() {
 	init_io();
-	USART_Init( __UBRR);
+	USART_Init(__UBRR);
 	adc_init();
+	pwm_init();
 	sei();
 	uint8_t inc;
 
-	//set motor rotation
-	M_RA_ON;
-	M_RB_OFF;
-	ADCSRA |= (1 << ADSC);
+	//	if (!(PINB & SH_L)) {
+	//	}
+	//	if (!(PINB & SH_F)) {
+	//	}
+	//	if (!(PIND & SH_R)) {
+	//	}
 
-	if (!(PINB & SH_L)) {
-	}
-	if (!(PINB & SH_F)) {
-	}
-	if (!(PIND & SH_R)) {
-	}
+	set_motors_dir(forward);
+	_delay_ms(500);
+	while (!sw_pressed()) {
+		uart_puts("hello");
+	};
+
+	//set_motors_vel(60,60);
+	OCR1A = 60;
+	OCR1B = 60;
 
 	while (1) {
-		if (sw_pressed())
-			LED_ON;
-		else
-			LED_OFF;
-
-		inc++;
-
-		_delay_ms(50);
-
-		uart_puts("\033[2J");   // clear screen
+		uart_puts("\033[2J"); // clear screen
 		uart_puts("\033[0;0H"); // set cursor to 0,0
 		uart_putint(inc, 10);
 		uart_puts("\r\n");
@@ -124,16 +79,37 @@ int main() {
 		uart_puts("SWITCH:   ");
 		uart_putint(tccrt[4], 10);
 		uart_puts("    \r\n");
+		if (sw_pressed())
+			LED_ON;
+		else
+			LED_OFF;
+		if (edge_detect()) {
+			//stop
+			uart_puts("EDGE!");
+			set_motors_dir(breaking);
+			OCR1A = 0;
+			OCR1B = 0;
+		}
+
+		if (uart_getc() == ' ') {
+			set_motors_dir(breaking);
+		}
+
+		inc++;
+
+		_delay_ms(50);
 
 	}
 
 }
 
-ISR(BADISR_vect) {
+ISR(BADISR_vect)
+{
 
 }
 
-ISR(ADC_vect) {
+ISR(ADC_vect)
+{
 	static volatile uint8_t k;
 	tccrt[k] = ADC;
 	++k;
@@ -146,11 +122,14 @@ ISR(ADC_vect) {
 }
 
 void adc_init() {
-//	ADCSRA |=
-//pres = 128 , interrupt enable enable
+	//	ADCSRA |=
+	//pres = 128 , interrupt enable enable
 	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) | (1 << ADCSRA);
 	ADCSRA |= (1 << ADEN) | (1 << ADIE); //ADSC
 	ADMUX = (1 << REFS0);
+
+	ADCSRA |= (1 << ADSC);
+
 }
 
 void init_io(void) {
@@ -190,7 +169,8 @@ uint8_t edge_detect() {
 	return x;
 }
 
-void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val, int MB_end_val) {
+void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val,
+		int MB_end_val) {
 
 }
 
@@ -201,56 +181,13 @@ void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val, int MB
  * M_RA (1<<PD5)
  * M_RB (1<<PD6)
  */
-void set_motors_dir(directions dir) {
-	switch (dir) {
-	case left: {
-		M_LA_OFF; //  low
-		M_LB_ON; //  high
-		M_RA_ON; //  high
-		M_RB_OFF; //  low
-		break;
-	}
-	case forward: {
-		M_LA_ON; //  high
-		M_LB_OFF; //  low
-		M_RA_ON; //  high
-		M_RB_OFF; //  low
-		break;
-	}
+void pwm_init() {
+	ICR1 = 255;
+	TCCR1A |=  (1 << WGM11);
+	TCCR1B |= (1 << WGM13) | (1 << WGM12);//|(1<<WGM10); // fast pwm with ICR1 as TOP
+	TCCR1A |= (1 << COM1A1) | (1 << COM1B1); // turn on outputs
+	TCCR1B |= (1 << CS11) | (1 << CS10); // pres 64
+	ICR1 = 255;
+	// pwm freq = 1,2kHz
+}
 
-	case backward: {
-		M_LA_OFF; //  low
-		M_LB_ON; //  high
-		M_RA_OFF; //  low
-		M_RB_ON; //  high
-		break;
-	}
-	case right: {
-		M_LA_ON; //  high
-		M_LB_OFF; //  low
-		M_RA_OFF; //  low
-		M_RB_ON; //  high
-		break;
-	}
-	default: {
-		break;
-		M_LA_OFF; //  low
-		M_LA_OFF; //  low
-		M_LA_OFF; //  low
-		M_LA_OFF; //  low
-	}
-	}
-}
-/*
- * Setting motors velocity
- * vel_N are in % from 0-100
- * pwm_N are int's from 0-255
- */
-void set_motors_vel(int vel_L, int vel_R) {
-	if (abs(OCR1A - vel_L) > 50 | abs(OCR1B - vel_R) > 50) {
-		motor_soft_start(OCR1A, vel_L, OCR1B, vel_R);
-	} else {
-		OCR1A = (int) 2.55 * vel_L;
-		OCR1B = (int) 2.55 * vel_R;
-	}
-}
