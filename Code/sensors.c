@@ -9,6 +9,8 @@
 #define SENSORS_C_
 #include "sensors.h"
 
+uint8_t adc_mul[5] = { 0b01000000, 0b01000001, 0b01000010, 0b01000111, 0b01000110 };
+
 uint8_t sw_pressed() {
 	if (tccrt[4] <= 100)
 		return 1;

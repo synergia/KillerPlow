@@ -420,7 +420,7 @@ END GROUP
  *(.fini0)
                 0x000007ac                _etext = .
 
-.data           0x00800100       0x72 load address 0x000007ac
+.data           0x00800100       0x68 load address 0x000007ac
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4/crtm88pa.o
@@ -439,64 +439,62 @@ END GROUP
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(utoa_ncheck.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(strrev.o)
  *(.data*)
- .data.adc_mul  0x00800100        0x5 ./Code/main.o
+ .data.adc_mul  0x00800100        0x5 ./Code/sensors.o
                 0x00800100                adc_mul
- .data.adc_mul  0x00800105        0x5 ./Code/moves.o
- .data.adc_mul  0x0080010a        0x5 ./Code/sensors.o
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x0080010f       0x62 ./Code/main.o
+                0x00800105       0x62 ./Code/main.o
                                  0x67 (size before relaxing)
  *(.gnu.linkonce.d*)
-                0x00800172                . = ALIGN (0x2)
- *fill*         0x00800171        0x1 
-                0x00800172                _edata = .
-                0x00800172                PROVIDE (__data_end, .)
+                0x00800168                . = ALIGN (0x2)
+ *fill*         0x00800167        0x1 
+                0x00800168                _edata = .
+                0x00800168                PROVIDE (__data_end, .)
 
-.bss            0x00800172       0x62
-                0x00800172                PROVIDE (__bss_start, .)
+.bss            0x00800168       0x62
+                0x00800168                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4/crtm88pa.o
- .bss           0x00800172        0x0 ./Code/accelerometer/acceleroeter.o
- .bss           0x00800172        0x0 ./Code/MKUART/mkuart.o
- .bss           0x00800172        0x0 ./Code/I2C_TWI/i2c_twi.o
- .bss           0x00800172        0x0 ./Code/main.o
- .bss           0x00800172        0x0 ./Code/moves.o
- .bss           0x00800172        0x0 ./Code/sensors.o
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_udivmodhi4.o)
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_exit.o)
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_copy_data.o)
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_clear_bss.o)
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(itoa.o)
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(itoa_ncheck.o)
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(utoa_ncheck.o)
- .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(strrev.o)
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4/crtm88pa.o
+ .bss           0x00800168        0x0 ./Code/accelerometer/acceleroeter.o
+ .bss           0x00800168        0x0 ./Code/MKUART/mkuart.o
+ .bss           0x00800168        0x0 ./Code/I2C_TWI/i2c_twi.o
+ .bss           0x00800168        0x0 ./Code/main.o
+ .bss           0x00800168        0x0 ./Code/moves.o
+ .bss           0x00800168        0x0 ./Code/sensors.o
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_udivmodhi4.o)
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_exit.o)
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_copy_data.o)
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_clear_bss.o)
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(itoa.o)
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(itoa_ncheck.o)
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(utoa_ncheck.o)
+ .bss           0x00800168        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(strrev.o)
  *(.bss*)
- .bss.k.1972    0x00800172        0x1 ./Code/main.o
+ .bss.k.1972    0x00800168        0x1 ./Code/main.o
  *(COMMON)
- COMMON         0x00800173       0x34 ./Code/MKUART/mkuart.o
-                0x00800173                UART_TxHead
-                0x00800174                UART_TxTail
-                0x00800175                UART_TxBuf
-                0x00800185                UART_RxHead
-                0x00800186                UART_RxTail
-                0x00800187                UART_RxBuf
- COMMON         0x008001a7        0xd ./Code/main.o
-                0x008001a7                tccrt
-                0x008001b1                sharp
- COMMON         0x008001b4       0x20 ./Code/moves.o
-                0x008001b4                moves
-                0x008001d4                PROVIDE (__bss_end, .)
+ COMMON         0x00800169       0x34 ./Code/MKUART/mkuart.o
+                0x00800169                UART_TxHead
+                0x0080016a                UART_TxTail
+                0x0080016b                UART_TxBuf
+                0x0080017b                UART_RxHead
+                0x0080017c                UART_RxTail
+                0x0080017d                UART_RxBuf
+ COMMON         0x0080019d        0xd ./Code/main.o
+                0x0080019d                tccrt
+                0x008001a7                sharp
+ COMMON         0x008001aa       0x20 ./Code/moves.o
+                0x008001aa                moves
+                0x008001ca                PROVIDE (__bss_end, .)
                 0x000007ac                __data_load_start = LOADADDR (.data)
-                0x0000081e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000814                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x008001d4        0x0
-                0x008001d4                PROVIDE (__noinit_start, .)
+.noinit         0x008001ca        0x0
+                0x008001ca                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x008001d4                PROVIDE (__noinit_end, .)
-                0x008001d4                _end = .
-                0x008001d4                PROVIDE (__heap_start, .)
+                0x008001ca                PROVIDE (__noinit_end, .)
+                0x008001ca                _end = .
+                0x008001ca                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)

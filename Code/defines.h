@@ -67,8 +67,7 @@ typedef enum {
 	left, forward, backward, right, breaking
 } directions;
 
-uint8_t adc_mul[] =
-		{ 0b01000000, 0b01000001, 0b01000010, 0b01000111, 0b01000110 };
+extern uint8_t adc_mul[5];
 volatile uint16_t tccrt[5];
 uint8_t sharp[3];
 

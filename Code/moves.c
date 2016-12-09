@@ -7,7 +7,6 @@
  */
 #include "moves.h"
 move moves[8];
-
 /* Listy of basic moves that robot can make*/
 void init_moves() {
 

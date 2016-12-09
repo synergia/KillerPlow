@@ -9,6 +9,7 @@
 #define MOVES_H_
 
 #include <stdlib.h>
+#include <avr/interrupt.h>
 #include "defines.h"
 #include "avr/io.h"
 
