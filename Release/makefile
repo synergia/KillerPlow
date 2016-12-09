@@ -57,7 +57,7 @@ all: KillerPlow.elf secondary-outputs
 KillerPlow.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: AVR C Linker'
-	avr-gcc -Wl,-Map,KillerPlow.map -mmcu=atmega88pa -o "KillerPlow.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	avr-gcc -Wl,-Map,KillerPlow.map -mmcu=atmega88p -o "KillerPlow.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -81,7 +81,7 @@ KillerPlow.eep: KillerPlow.elf
 
 sizedummy: KillerPlow.elf
 	@echo 'Invoking: Print Size'
-	-avr-size --format=avr --mcu=atmega88pa KillerPlow.elf
+	-avr-size --format=avr --mcu=atmega88p KillerPlow.elf
 	@echo 'Finished building: $@'
 	@echo ' '
 

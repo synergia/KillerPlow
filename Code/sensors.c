@@ -35,21 +35,9 @@ uint8_t edge_detect() {
 }
 
 void enemy_detect() {
-	if (!(PORTB & SH_L)) {
-		sharp[0] = 1;
-	} else {
-		sharp[0] = 0;
-	}
-	if (!(PORTB & SH_F)) {
-		sharp[1] = 1;
-	} else {
-		sharp[1] = 0;
-	}
-	if (!(PORTD & SH_R)) {
-		sharp[2] = 1;
-	} else {
-		sharp[2] = 0;
-	}
+	sharp[0] = !(PINB & SH_L);
+	sharp[1] = !(PINB & SH_F);
+	sharp[2] = !(PIND & SH_R);
 }
 
 #endif /* SENSORS_C_ */

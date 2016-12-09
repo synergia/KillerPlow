@@ -51,10 +51,16 @@ void init_moves() {
 	moves[7].time = 200;
 }
 
-void invoke_move(uint8_t i) {
+void invoke_pattern_move(uint8_t i) {
 	set_motors_vel(moves[i].VEL_L, moves[i].VEL_R);
 	set_motors_dir(moves[i].dir);
 //time will be set in timer interrupt
+}
+
+/*if we find time*/
+void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val,
+		int MB_end_val) {
+
 }
 
 void set_motors_dir(directions dir) {
@@ -110,8 +116,35 @@ void set_motors_vel(int vel_L, int vel_R) {
 
 }
 
-/*if we find time*/
-void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val,
-		int MB_end_val) {
+void attack_enemy() {
+	if (sharp[0]) { //left
+		set_motors_dir(left);
+		set_motors_vel(50, 50);
+	}
+	if (sharp[1]) { //front
+		set_motors_dir(forward);
+		set_motors_vel(80, 80);
+	}
+	if (sharp[2]) { //right
+		set_motors_dir(right);
+		set_motors_vel(50, 50);
+	}
+}
 
+void run_from_edge() {
+
+}
+
+void start_move(directions dir) {
+	set_motors_dir(backward);
+	set_motors_vel(80, 80);
+	_delay_ms(250);
+	if(dir == left)
+		set_motors_dir(left);
+	else
+		set_motors_dir(right);
+	set_motors_vel(80, 80);
+	_delay_ms(500);
+	set_motors_dir(breaking);
+	set_motors_vel(0, 0);
 }

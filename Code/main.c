@@ -14,6 +14,8 @@
 #include "sensors.h"
 //#include "I2C_TWI/i2c_twi.h"
 
+#define F_CPU 20000000 //20MHz
+
 //quote from atmega88 datasheet
 /*"If any ADC [3..0] port pins are used as digital outputs,
  it is essential that these do not switch while a conversion is in progress.
@@ -27,12 +29,15 @@
 void init_io(void);
 void adc_init();
 void pwm_init();
+void tim_init();
+volatile int counter = 0;
 
 int main() {
 	init_io();
 	USART_Init(__UBRR);
 	adc_init();
 	pwm_init();
+	//tim_init();
 	sei();
 	/* end of initialization */
 	uart_puts("\033[2J"); // clear screen
@@ -41,7 +46,14 @@ int main() {
 	_delay_ms(500);
 
 	uint8_t inc = 0;
-
+	for (uint8_t i=0; i < 10; i++) {
+		LED_ON;
+		for(uint8_t j=0; j<50; j++)
+			_delay_ms(10);
+		LED_OFF;
+		for(uint8_t j=0; j<50; j++)
+			_delay_ms(10);
+	}
 	/*Hello information*/
 	while (!sw_pressed()) {
 		uart_puts("Hello");
@@ -51,14 +63,16 @@ int main() {
 		uart_puts("\033[2J"); // clear screen
 		uart_puts("\033[0;0H"); // set cursor to 0,0
 	};
+	_delay_ms(3000);
+	start_move(left);
 
 	while (1) {
 		/*Execution for pressing button*/
-		if (sw_pressed())
-			LED_ON;
-		else
-			LED_OFF;
-
+		/*if (sw_pressed())
+		 LED_ON;
+		 else
+		 LED_OFF;
+		 */
 		uart_puts("\033[2J"); // clear screen
 		uart_puts("\033[0;0H"); // set cursor to 0,0
 		uart_putint(inc, 10);
@@ -75,14 +89,20 @@ int main() {
 		uart_puts("SWITCH:   ");
 		uart_putint(tccrt[4], 10);
 		uart_puts("    \r\n");
+
 		/*Detecting opponent*/
 		enemy_detect();
+
 		/*SHARPs debug info*/
-		uart_puts("SHARP:   ");
+		uart_puts("SHARP_L:  ");
+		uart_putint(!(PINB & SH_L), 2);
 		uart_puts("    \r\n");
-		uart_putint(PORTB, 2);
+		uart_puts("SHARP_F:  ");
+		uart_putint(!(PINB & SH_F), 2);
 		uart_puts("    \r\n");
-		uart_putint(PORTD, 2);
+		uart_puts("SHARP_R:  ");
+		uart_putint(!(PIND & SH_R), 2);
+		uart_puts("    \r\n");
 
 		/*Detecting end of Dojo*/
 		if (edge_detect()) {
@@ -119,8 +139,9 @@ ISR(ADC_vect) {
 	ADCSRA |= (1 << ADSC);
 }
 
-ISR(TIMER0_COMPA_vect) {
-
+ISR(TIMER0_COMPB_vect) { //tak jest dobrze!!
+	PINB ^= LED_PIN;
+	_delay_ms(1000);
 }
 
 void adc_init() {
@@ -144,8 +165,9 @@ void init_io(void) {
 void tim_init() {
 	TCCR0A |= (1 << WGM01); //CTC mode
 	TCCR0B |= (1 << CS02) | (1 << CS00); //CLK, 1024 prescaler
-	TIMSK0 |= (1 << TOIE0); //enable interrupts
-	OCR0A = 255;
+	TCNT0 = 0;
+	TIMSK0 |= (1 << OCIE0A); //enable interrupts
+	OCR0A = 195;
 }
 
 void pwm_init() {

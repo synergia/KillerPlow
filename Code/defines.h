@@ -70,5 +70,4 @@ typedef enum {
 extern uint8_t adc_mul[5];
 volatile uint16_t tccrt[5];
 extern uint8_t sharp[3];
-
 #endif /* DEFINES_H_ */
