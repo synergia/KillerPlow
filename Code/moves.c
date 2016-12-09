@@ -95,7 +95,14 @@ void set_motors_dir(directions dir) {
 		M_RB_ON; //  high
 		break;
 	}
-	case breaking:
+	case breaking: {
+		M_LA_OFF; //  low
+		M_LA_OFF; //  low
+		M_LA_OFF; //  low
+		M_LA_OFF; //  low
+		set_motors_vel(0, 0);
+		break;
+	}
 	default: {
 		M_LA_OFF; //  low
 		M_LA_OFF; //  low
@@ -118,20 +125,22 @@ void set_motors_vel(int vel_L, int vel_R) {
 }
 
 void attack_enemy() {
-	if (sharp[0]) { //left
-		motors.Mot_dir = left;
-		motors.Mot_A_vel = 50;
-		motors.Mot_B_vel = 50;
-	}
-	if (sharp[1]) { //front
+	if (!(PINB & SH_F)) { //front
 		motors.Mot_dir = forward;
+		motors.Mot_A_vel = 90;
+		motors.Mot_B_vel = 90;
+	} else if (!(PINB & SH_L)) { //left
+		motors.Mot_dir = left;
 		motors.Mot_A_vel = 80;
 		motors.Mot_B_vel = 80;
-	}
-	if (sharp[2]) { //right
+	} else if (!(PIND & SH_R)) { //right
 		motors.Mot_dir = right;
-		motors.Mot_A_vel = 50;
-		motors.Mot_B_vel = 50;
+		motors.Mot_A_vel = 80;
+		motors.Mot_B_vel = 80;
+	} else {
+		motors.Mot_dir = breaking;
+		motors.Mot_A_vel = 0;
+		motors.Mot_B_vel = 0;
 	}
 }
 
@@ -146,13 +155,10 @@ void run_from_edge() {
 void start_move(directions dir) {
 	set_motors_dir(backward);
 	set_motors_vel(80, 80);
-	_delay_ms(100);
+	_delay_ms(200);
 	if (dir == left)
 		set_motors_dir(left);
 	else
 		set_motors_dir(right);
 	set_motors_vel(80, 80);
-	_delay_ms(100);
-	set_motors_dir(breaking);
-	set_motors_vel(0, 0);
 }

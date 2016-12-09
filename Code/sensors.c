@@ -9,8 +9,8 @@
 #define SENSORS_C_
 #include "sensors.h"
 
-uint8_t adc_mul[5] = { 0b01000000, 0b01000001, 0b01000010, 0b01000111, 0b01000110 };
-uint8_t sharp[3];
+uint8_t adc_mul[5] = { 0b01000000, 0b01000001, 0b01000010, 0b01000111,
+		0b01000110 };
 
 uint8_t sw_pressed() {
 	if (tccrt[4] <= 100)
@@ -32,12 +32,6 @@ uint8_t edge_detect() {
 	}
 
 	return x;
-}
-
-void enemy_detect() {
-	sharp[0] = !(PINB & SH_L);
-	sharp[1] = !(PINB & SH_F);
-	sharp[2] = !(PIND & SH_R);
 }
 
 #endif /* SENSORS_C_ */

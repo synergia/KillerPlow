@@ -13,6 +13,5 @@
 
 uint8_t sw_pressed();
 uint8_t edge_detect();
-void enemy_detect();
 
 #endif /* SENSORS_H_ */
