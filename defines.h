@@ -8,6 +8,8 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+#include "avr/io.h"
+
 #define max_speed 255
 #define three_q_speed 192
 #define half_speed 128
@@ -61,9 +63,13 @@
 #define LED_ON PORTB &= ~LED_PIN
 #define LED_OFF PORTB |= LED_PIN
 
-
 typedef enum {
-	left, forward, backward, right,breaking
+	left, forward, backward, right, breaking
 } directions;
+
+uint8_t adc_mul[] =
+		{ 0b01000000, 0b01000001, 0b01000010, 0b01000111, 0b01000110 };
+volatile uint16_t tccrt[5];
+uint8_t sharp[3];
 
 #endif /* DEFINES_H_ */

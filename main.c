@@ -11,8 +11,8 @@
 #include "MKUART/mkuart.h"
 #include "defines.h"
 #include "moves.h"
+#include "sensors.h"
 //#include "I2C_TWI/i2c_twi.h"
-
 
 //quote from atmega88 datasheet
 /*"If any ADC [3..0] port pins are used as digital outputs,
@@ -25,18 +25,9 @@
 // X axis - fron/rear
 // y axis -left/right
 
-
 void init_io(void);
-void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val,
-		int MB_end_val);
-
 void adc_init();
-uint8_t edge_detect();
-uint8_t sw_pressed();
 void pwm_init();
-uint8_t adc_mul[] = { 0b01000000, 0b01000001, 0b01000010, 0b01000111,
-		0b01000110 };
-volatile uint16_t tccrt[5];
 
 int main() {
 	init_io();
@@ -44,45 +35,58 @@ int main() {
 	adc_init();
 	pwm_init();
 	sei();
-	uint8_t inc;
-
-	//	if (!(PINB & SH_L)) {
-	//	}
-	//	if (!(PINB & SH_F)) {
-	//	}
-	//	if (!(PIND & SH_R)) {
-	//	}
-
-	set_motors_dir(forward);
+	/* end of initialization */
+	uart_puts("\033[2J"); // clear screen
+	uart_puts("\033[0;0H"); // set cursor to 0,0
+	uart_puts("Init complete");
 	_delay_ms(500);
+
+	uint8_t inc = 0;
+
+	/*Hello information*/
 	while (!sw_pressed()) {
-		uart_puts("hello");
+		uart_puts("Hello");
+		uart_puts("\r\n");
+		uart_puts("Press button on KP to start");
+		_delay_ms(10);
+		uart_puts("\033[2J"); // clear screen
+		uart_puts("\033[0;0H"); // set cursor to 0,0
 	};
 
-	//set_motors_vel(60,60);
-	OCR1A = 60;
-	OCR1B = 60;
-
 	while (1) {
+		/*Execution for pressing button*/
+		if (sw_pressed())
+			LED_ON;
+		else
+			LED_OFF;
+
 		uart_puts("\033[2J"); // clear screen
 		uart_puts("\033[0;0H"); // set cursor to 0,0
 		uart_putint(inc, 10);
 		uart_puts("\r\n");
 		uart_putint(edge_detect(), 2);
 		uart_puts("\r\n");
-
+		/*TCCRTs debug info*/
 		for (uint8_t j = 0; j <= 3; ++j) {
 			uart_puts("TCCRTN:");
 			uart_putint(tccrt[j], 10);
 			uart_puts("\r\n");
 		}
+		/*Switch debug info*/
 		uart_puts("SWITCH:   ");
 		uart_putint(tccrt[4], 10);
 		uart_puts("    \r\n");
-		if (sw_pressed())
-			LED_ON;
-		else
-			LED_OFF;
+		/*Detecting opponent*/
+		enemy_detect();
+		/*SHARPs debug info*/
+		for (uint8_t j = 0; j <= 2; ++j) {
+			uart_puts("SHARP");
+			uart_putint(j, 10);
+			uart_puts(":");
+			uart_putint(sharp[j], 2);
+			uart_puts("\r\n");
+		}
+		/*Detecting end of Dojo*/
 		if (edge_detect()) {
 			//stop
 			uart_puts("EDGE!");
@@ -90,26 +94,22 @@ int main() {
 			OCR1A = 0;
 			OCR1B = 0;
 		}
-
+		/*Emergency STOP*/
 		if (uart_getc() == ' ') {
 			set_motors_dir(breaking);
 		}
 
-		inc++;
+		_delay_ms(10);
 
-		_delay_ms(50);
+	} //while(1)
 
-	}
+} //main
 
-}
-
-ISR(BADISR_vect)
-{
+ISR(BADISR_vect) {
 
 }
 
-ISR(ADC_vect)
-{
+ISR(ADC_vect) {
 	static volatile uint8_t k;
 	tccrt[k] = ADC;
 	++k;
@@ -136,7 +136,7 @@ void init_io(void) {
 
 	DDRB = 0b00100111;
 	DDRC = 0b00000000;
-	DDRD = 0b11100000; //to check
+	DDRD = 0b11100000; //to check`
 
 	//PWM
 	//TCCR1A |= (1 << COM1A1) | (1 << COM1B1) | (1 << WGM10);//to check
@@ -147,43 +147,9 @@ void init_io(void) {
 
 }
 
-uint8_t sw_pressed() {
-	if (tccrt[4] <= 100)
-		return 1;
-	else
-		return 0;
-
-}
-
-uint8_t edge_detect() {
-	uint8_t x = 0;
-
-	for (uint8_t i = 0; i <= 3; ++i) {
-		if (tccrt[i] < wb_treshold)
-			x |= (1 << i); //set bit if edge detected
-		//	eg. 	0000 0011 edge on one side
-		// eg.		0000 1100 edge on the oposite side
-		// eg. 		0000 0100 edge on the robot's corner
-	}
-
-	return x;
-}
-
-void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val,
-		int MB_end_val) {
-
-}
-
-/*
- * Setting motors directions
- * M_LA (1<<PB0)
- * M_LB (1<<PD7)
- * M_RA (1<<PD5)
- * M_RB (1<<PD6)
- */
 void pwm_init() {
 	ICR1 = 255;
-	TCCR1A |=  (1 << WGM11);
+	TCCR1A |= (1 << WGM11);
 	TCCR1B |= (1 << WGM13) | (1 << WGM12);//|(1<<WGM10); // fast pwm with ICR1 as TOP
 	TCCR1A |= (1 << COM1A1) | (1 << COM1B1); // turn on outputs
 	TCCR1B |= (1 << CS11) | (1 << CS10); // pres 64
