@@ -24,7 +24,6 @@
 //note to LSM303D we will be using interrupts from X and Y axis sources
 // X axis - fron/rear
 // y axis -left/right
-
 void init_io(void);
 void adc_init();
 void pwm_init();
@@ -79,13 +78,12 @@ int main() {
 		/*Detecting opponent*/
 		enemy_detect();
 		/*SHARPs debug info*/
-		for (uint8_t j = 0; j <= 2; ++j) {
-			uart_puts("SHARP");
-			uart_putint(j, 10);
-			uart_puts(":");
-			uart_putint(sharp[j], 2);
-			uart_puts("\r\n");
-		}
+		uart_puts("SHARP:   ");
+		uart_puts("    \r\n");
+		uart_putint(PORTB, 2);
+		uart_puts("    \r\n");
+		uart_putint(PORTD, 2);
+
 		/*Detecting end of Dojo*/
 		if (edge_detect()) {
 			//stop
@@ -121,6 +119,10 @@ ISR(ADC_vect) {
 	ADCSRA |= (1 << ADSC);
 }
 
+ISR(TIMER0_COMPA_vect) {
+
+}
+
 void adc_init() {
 	//	ADCSRA |=
 	//pres = 128 , interrupt enable enable
@@ -137,19 +139,24 @@ void init_io(void) {
 	DDRB = 0b00100111;
 	DDRC = 0b00000000;
 	DDRD = 0b11100000;
+}
 
-	/*Pullup on SHARPs input*/
-	PINB |= SH_L | SH_F;
-	PIND |= SH_R;
+void tim_init() {
+	TCCR0A |= (1 << WGM01); //CTC mode
+	TCCR0B |= (1 << CS02) | (1 << CS00); //CLK, 1024 prescaler
+	TIMSK0 |= (1 << TOIE0); //enable interrupts
+	OCR0A = 255;
 }
 
 void pwm_init() {
+	/*Timer1*/
 	ICR1 = 255;
 	TCCR1A |= (1 << WGM11);
-	TCCR1B |= (1 << WGM13) | (1 << WGM12);//|(1<<WGM10); // fast pwm with ICR1 as TOP
+	TCCR1B |= (1 << WGM13) | (1 << WGM12); //|(1<<WGM10); // fast pwm with ICR1 as TOP
 	TCCR1A |= (1 << COM1A1) | (1 << COM1B1); // turn on outputs
 	TCCR1B |= (1 << CS11) | (1 << CS10); // pres 64
 	ICR1 = 255;
 	// pwm freq = 1,2kHz
+
 }
 
