@@ -4,6 +4,8 @@
  *  Created on: 4 gru 2016
  *      Authors: DefaultMan & Frozen
  */
+
+#define F_CPU 6000000UL
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -13,8 +15,6 @@
 #include "moves.h"
 #include "sensors.h"
 //#include "I2C_TWI/i2c_twi.h"
-
-#define F_CPU 20000000 //20MHz
 
 //quote from atmega88 datasheet
 /*"If any ADC [3..0] port pins are used as digital outputs,
@@ -29,9 +29,102 @@
 void init_io(void);
 void adc_init();
 void pwm_init();
-void tim_init();
+//void tim_init();
 volatile int counter = 0;
 
+/*debugger main*/
+//
+//int main() {
+//	init_io();
+//	USART_Init(__UBRR);
+//	adc_init();
+//	pwm_init();
+//	//tim_init();
+//	sei();
+//	/* end of initialization */
+//	uart_puts("\033[2J"); // clear screen
+//	uart_puts("\033[0;0H"); // set cursor to 0,0
+//	uart_puts("Init complete");
+//	_delay_ms(500);
+//
+//	uint8_t inc = 0;
+//	for (uint8_t i=0; i < 10; i++) {
+//		LED_ON;
+//		for(uint8_t j=0; j<50; j++)
+//			_delay_ms(10);
+//		LED_OFF;
+//		for(uint8_t j=0; j<50; j++)
+//			_delay_ms(10);
+//	}
+//	/*Hello information*/
+//	while (!sw_pressed()) {
+//		uart_puts("Hello");
+//		uart_puts("\r\n");
+//		uart_puts("Press button on KP to start");
+//		_delay_ms(10);
+//		uart_puts("\033[2J"); // clear screen
+//		uart_puts("\033[0;0H"); // set cursor to 0,0
+//	};
+//	_delay_ms(3000);
+//	start_move(left);
+//
+//	while (1) {
+//		/*Execution for pressing button*/
+//		/*if (sw_pressed())
+//		 LED_ON;
+//		 else
+//		 LED_OFF;
+//		 */
+//		uart_puts("\033[2J"); // clear screen
+//		uart_puts("\033[0;0H"); // set cursor to 0,0
+//		uart_putint(inc, 10);
+//		uart_puts("\r\n");
+//		uart_putint(edge_detect(), 2);
+//		uart_puts("\r\n");
+//		/*TCCRTs debug info*/
+//		for (uint8_t j = 0; j <= 3; ++j) {
+//			uart_puts("TCCRTN:");
+//			uart_putint(tccrt[j], 10);
+//			uart_puts("\r\n");
+//		}
+//		/*Switch debug info*/
+//		uart_puts("SWITCH:   ");
+//		uart_putint(tccrt[4], 10);
+//		uart_puts("    \r\n");
+//
+//		/*Detecting opponent*/
+//		enemy_detect();
+//
+//		/*SHARPs debug info*/
+//		uart_puts("SHARP_L:  ");
+//		uart_putint(!(PINB & SH_L), 2);
+//		uart_puts("    \r\n");
+//		uart_puts("SHARP_F:  ");
+//		uart_putint(!(PINB & SH_F), 2);
+//		uart_puts("    \r\n");
+//		uart_puts("SHARP_R:  ");
+//		uart_putint(!(PIND & SH_R), 2);
+//		uart_puts("    \r\n");
+//
+//		/*Detecting end of Dojo*/
+//		if (edge_detect()) {
+//			//stop
+//			uart_puts("EDGE!");
+//			set_motors_dir(breaking);
+//			OCR1A = 0;
+//			OCR1B = 0;
+//		}
+//		/*Emergency STOP*/
+//		if (uart_getc() == ' ') {
+//			set_motors_dir(breaking);
+//		}
+//
+//		_delay_ms(10);
+//
+//	} //while(1)
+//
+//} //main
+//
 int main() {
 	init_io();
 	USART_Init(__UBRR);
@@ -39,89 +132,35 @@ int main() {
 	pwm_init();
 	//tim_init();
 	sei();
-	/* end of initialization */
-	uart_puts("\033[2J"); // clear screen
-	uart_puts("\033[0;0H"); // set cursor to 0,0
-	uart_puts("Init complete");
-	_delay_ms(500);
 
-	uint8_t inc = 0;
-	for (uint8_t i=0; i < 10; i++) {
-		LED_ON;
-		for(uint8_t j=0; j<50; j++)
-			_delay_ms(10);
-		LED_OFF;
-		for(uint8_t j=0; j<50; j++)
-			_delay_ms(10);
-	}
-	/*Hello information*/
-	while (!sw_pressed()) {
-		uart_puts("Hello");
-		uart_puts("\r\n");
-		uart_puts("Press button on KP to start");
-		_delay_ms(10);
-		uart_puts("\033[2J"); // clear screen
-		uart_puts("\033[0;0H"); // set cursor to 0,0
+	tccrt[4]=1000; //init vaule
+	while (!sw_pressed()){
+		PORTB^=LED_PIN;
+		_delay_ms(500);
 	};
-	_delay_ms(3000);
+	LED_OFF;
+	_delay_ms(2000);
 	start_move(left);
-
 	while (1) {
-		/*Execution for pressing button*/
-		/*if (sw_pressed())
-		 LED_ON;
-		 else
-		 LED_OFF;
-		 */
+		run_from_edge();
+		//attack_enemy();
+		set_motors_dir(motors.Mot_dir);
+		set_motors_vel(motors.Mot_A_vel, motors.Mot_B_vel);
+
 		uart_puts("\033[2J"); // clear screen
-		uart_puts("\033[0;0H"); // set cursor to 0,0
-		uart_putint(inc, 10);
-		uart_puts("\r\n");
-		uart_putint(edge_detect(), 2);
-		uart_puts("\r\n");
-		/*TCCRTs debug info*/
-		for (uint8_t j = 0; j <= 3; ++j) {
-			uart_puts("TCCRTN:");
-			uart_putint(tccrt[j], 10);
+			uart_puts("\033[0;0H"); // set cursor to 0,0
 			uart_puts("\r\n");
-		}
-		/*Switch debug info*/
-		uart_puts("SWITCH:   ");
-		uart_putint(tccrt[4], 10);
-		uart_puts("    \r\n");
+			uart_putint(edge_detect(), 2);
+			uart_puts("\r\n");
+			/*TCCRTs debug info*/
+			for (uint8_t j = 0; j <= 3; ++j) {
+				uart_puts("TCCRTN:");
+				uart_putint(tccrt[j], 10);
+				uart_puts("\r\n");
+			}
 
-		/*Detecting opponent*/
-		enemy_detect();
-
-		/*SHARPs debug info*/
-		uart_puts("SHARP_L:  ");
-		uart_putint(!(PINB & SH_L), 2);
-		uart_puts("    \r\n");
-		uart_puts("SHARP_F:  ");
-		uart_putint(!(PINB & SH_F), 2);
-		uart_puts("    \r\n");
-		uart_puts("SHARP_R:  ");
-		uart_putint(!(PIND & SH_R), 2);
-		uart_puts("    \r\n");
-
-		/*Detecting end of Dojo*/
-		if (edge_detect()) {
-			//stop
-			uart_puts("EDGE!");
-			set_motors_dir(breaking);
-			OCR1A = 0;
-			OCR1B = 0;
-		}
-		/*Emergency STOP*/
-		if (uart_getc() == ' ') {
-			set_motors_dir(breaking);
-		}
-
-		_delay_ms(10);
-
-	} //while(1)
-
-} //main
+	}
+}
 
 ISR(BADISR_vect) {
 
@@ -150,8 +189,11 @@ void adc_init() {
 	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) | (1 << ADCSRA);
 	ADCSRA |= (1 << ADEN) | (1 << ADIE); //ADSC
 	ADMUX = (1 << REFS0);
-
+_delay_us(250);
 	ADCSRA |= (1 << ADSC);
+	for(uint8_t i =0;i<=4;++i){
+		tccrt[i]=1023;
+	}
 
 }
 

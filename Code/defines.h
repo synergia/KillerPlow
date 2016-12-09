@@ -21,7 +21,6 @@
 #define SH_F (1<<PB4)
 #define SH_R (1<<PD4)
 
-#define F_CPU 20000000UL
 //TCRT's
 #define TCRT1 (1<<PC0)
 #define TCRT2 (1<<PC1)

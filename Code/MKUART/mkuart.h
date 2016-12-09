@@ -10,8 +10,8 @@
 
 
 #define UART_BAUD 57600UL		// tu definiujemy interesuj¹c¹ nas prêdkoœæ
-#define F_CPU 20000000UL
-#define __UBRR F_CPU/16/UART_BAUD-1  // obliczamy UBRR dla U2X=0
+#define F_CPU_uart 20000000UL
+#define __UBRR F_CPU_uart/16/UART_BAUD-1  // obliczamy UBRR dla U2X=0
 
 // definicje na potrzeby RS485
 //#define UART_DE_PORT PORTD

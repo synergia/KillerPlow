@@ -7,6 +7,7 @@
  */
 #include "moves.h"
 move moves[8];
+motors_set motors;
 /* Listy of basic moves that robot can make*/
 void init_moves() {
 
@@ -118,33 +119,40 @@ void set_motors_vel(int vel_L, int vel_R) {
 
 void attack_enemy() {
 	if (sharp[0]) { //left
-		set_motors_dir(left);
-		set_motors_vel(50, 50);
+		motors.Mot_dir = left;
+		motors.Mot_A_vel = 50;
+		motors.Mot_B_vel = 50;
 	}
 	if (sharp[1]) { //front
-		set_motors_dir(forward);
-		set_motors_vel(80, 80);
+		motors.Mot_dir = forward;
+		motors.Mot_A_vel = 80;
+		motors.Mot_B_vel = 80;
 	}
 	if (sharp[2]) { //right
-		set_motors_dir(right);
-		set_motors_vel(50, 50);
+		motors.Mot_dir = right;
+		motors.Mot_A_vel = 50;
+		motors.Mot_B_vel = 50;
 	}
 }
 
 void run_from_edge() {
-
+	if (edge_detect()) {
+		motors.Mot_dir = breaking;
+		motors.Mot_A_vel = 0;
+		motors.Mot_B_vel = 0;
+	}
 }
 
 void start_move(directions dir) {
 	set_motors_dir(backward);
 	set_motors_vel(80, 80);
-	_delay_ms(250);
-	if(dir == left)
+	_delay_ms(100);
+	if (dir == left)
 		set_motors_dir(left);
 	else
 		set_motors_dir(right);
 	set_motors_vel(80, 80);
-	_delay_ms(500);
+	_delay_ms(100);
 	set_motors_dir(breaking);
 	set_motors_vel(0, 0);
 }

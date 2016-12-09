@@ -22,8 +22,15 @@ typedef struct{
 	uint8_t time;
 }move;
 
-extern  move moves[8];
+typedef struct {
+	int Mot_A_vel;
+	int Mot_B_vel;
+	directions Mot_dir;
 
+} motors_set;
+
+extern  move moves[8];
+extern  motors_set motors;
 void init_moves();
 void invoke_pattern_move(uint8_t i); // i is move number
 void set_motors_dir(directions dir);
