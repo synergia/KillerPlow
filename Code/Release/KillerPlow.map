@@ -1,15 +1,15 @@
 Archive member included because of file (symbol)
 
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_udivmodhi4.o)
-                              ./Code/I2C_TWI/i2c_twi.o (__udivmodhi4)
+                              ./I2C_TWI/i2c_twi.o (__udivmodhi4)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_exit.o)
                               c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4/crtm88pa.o (exit)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_copy_data.o)
-                              ./Code/main.o (__do_copy_data)
+                              ./main.o (__do_copy_data)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_clear_bss.o)
-                              ./Code/MKUART/mkuart.o (__do_clear_bss)
+                              ./MKUART/mkuart.o (__do_clear_bss)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(itoa.o)
-                              ./Code/MKUART/mkuart.o (__itoa)
+                              ./MKUART/mkuart.o (__itoa)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(itoa_ncheck.o)
                               c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(itoa.o) (__itoa_ncheck)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(utoa_ncheck.o)
@@ -20,15 +20,15 @@ c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/..
 Allocating common symbols
 Common symbol       size              file
 
-UART_TxHead         0x1               ./Code/MKUART/mkuart.o
-moves               0x20              ./Code/moves.o
-UART_TxTail         0x1               ./Code/MKUART/mkuart.o
-tccrt               0xa               ./Code/main.o
-UART_TxBuf          0x10              ./Code/MKUART/mkuart.o
-sharp               0x3               ./Code/main.o
-UART_RxHead         0x1               ./Code/MKUART/mkuart.o
-UART_RxTail         0x1               ./Code/MKUART/mkuart.o
-UART_RxBuf          0x20              ./Code/MKUART/mkuart.o
+UART_TxHead         0x1               ./MKUART/mkuart.o
+moves               0x20              ./moves.o
+UART_TxTail         0x1               ./MKUART/mkuart.o
+tccrt               0xa               ./main.o
+UART_TxBuf          0x10              ./MKUART/mkuart.o
+sharp               0x3               ./main.o
+UART_RxHead         0x1               ./MKUART/mkuart.o
+UART_RxTail         0x1               ./MKUART/mkuart.o
+UART_RxBuf          0x20              ./MKUART/mkuart.o
 
 Memory Configuration
 
@@ -46,12 +46,12 @@ Linker script and memory map
 
 Address of section .data set to 0x800100
 LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4/crtm88pa.o
-LOAD ./Code/accelerometer/acceleroeter.o
-LOAD ./Code/MKUART/mkuart.o
-LOAD ./Code/I2C_TWI/i2c_twi.o
-LOAD ./Code/main.o
-LOAD ./Code/moves.o
-LOAD ./Code/sensors.o
+LOAD ./accelerometer/acceleroeter.o
+LOAD ./MKUART/mkuart.o
+LOAD ./I2C_TWI/i2c_twi.o
+LOAD ./main.o
+LOAD ./moves.o
+LOAD ./sensors.o
 START GROUP
 LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a
 LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libm.a
@@ -227,12 +227,12 @@ END GROUP
                 0x0000006a                __vector_10
                 0x0000006a                __vector_16
                 0x0000006a                __vector_20
- .text          0x0000006c        0x0 ./Code/accelerometer/acceleroeter.o
- .text          0x0000006c        0x0 ./Code/MKUART/mkuart.o
- .text          0x0000006c        0x0 ./Code/I2C_TWI/i2c_twi.o
- .text          0x0000006c        0x0 ./Code/main.o
- .text          0x0000006c        0x0 ./Code/moves.o
- .text          0x0000006c        0x0 ./Code/sensors.o
+ .text          0x0000006c        0x0 ./accelerometer/acceleroeter.o
+ .text          0x0000006c        0x0 ./MKUART/mkuart.o
+ .text          0x0000006c        0x0 ./I2C_TWI/i2c_twi.o
+ .text          0x0000006c        0x0 ./main.o
+ .text          0x0000006c        0x0 ./moves.o
+ .text          0x0000006c        0x0 ./sensors.o
  .text          0x0000006c        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_udivmodhi4.o)
  .text          0x0000006c        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_exit.o)
  .text          0x0000006c        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_copy_data.o)
@@ -244,87 +244,87 @@ END GROUP
                 0x0000006c                . = ALIGN (0x2)
  *(.text.*)
  .text.USART_Init
-                0x0000006c       0x2e ./Code/MKUART/mkuart.o
+                0x0000006c       0x2e ./MKUART/mkuart.o
                 0x0000006c                USART_Init
  .text.uart_putc
-                0x0000009a       0x2a ./Code/MKUART/mkuart.o
+                0x0000009a       0x2a ./MKUART/mkuart.o
                 0x0000009a                uart_putc
  .text.uart_puts
-                0x000000c4       0x16 ./Code/MKUART/mkuart.o
+                0x000000c4       0x16 ./MKUART/mkuart.o
                 0x000000c4                uart_puts
  .text.uart_putint
-                0x000000da       0x36 ./Code/MKUART/mkuart.o
+                0x000000da       0x36 ./MKUART/mkuart.o
                 0x000000da                uart_putint
  .text.__vector_19
-                0x00000110       0x58 ./Code/MKUART/mkuart.o
+                0x00000110       0x58 ./MKUART/mkuart.o
                 0x00000110                __vector_19
  .text.uart_getc
-                0x00000168       0x2a ./Code/MKUART/mkuart.o
+                0x00000168       0x2a ./MKUART/mkuart.o
                 0x00000168                uart_getc
  .text.__vector_18
-                0x00000192       0x44 ./Code/MKUART/mkuart.o
+                0x00000192       0x44 ./MKUART/mkuart.o
                 0x00000192                __vector_18
  .text.i2cSetBitrate
-                0x000001d6       0x22 ./Code/I2C_TWI/i2c_twi.o
+                0x000001d6       0x22 ./I2C_TWI/i2c_twi.o
                 0x000001d6                i2cSetBitrate
  .text.TWI_start
-                0x000001f8       0x10 ./Code/I2C_TWI/i2c_twi.o
+                0x000001f8       0x10 ./I2C_TWI/i2c_twi.o
                 0x000001f8                TWI_start
  .text.TWI_stop
-                0x00000208       0x10 ./Code/I2C_TWI/i2c_twi.o
+                0x00000208       0x10 ./I2C_TWI/i2c_twi.o
                 0x00000208                TWI_stop
  .text.TWI_write
-                0x00000218       0x14 ./Code/I2C_TWI/i2c_twi.o
+                0x00000218       0x14 ./I2C_TWI/i2c_twi.o
                 0x00000218                TWI_write
  .text.TWI_read
-                0x0000022c       0x1c ./Code/I2C_TWI/i2c_twi.o
+                0x0000022c       0x1c ./I2C_TWI/i2c_twi.o
                 0x0000022c                TWI_read
  .text.TWI_write_buf
-                0x00000248       0x54 ./Code/I2C_TWI/i2c_twi.o
+                0x00000248       0x54 ./I2C_TWI/i2c_twi.o
                 0x00000248                TWI_write_buf
  .text.TWI_read_buf
-                0x0000029c       0x64 ./Code/I2C_TWI/i2c_twi.o
+                0x0000029c       0x64 ./I2C_TWI/i2c_twi.o
                 0x0000029c                TWI_read_buf
  .text.__vector_default
-                0x00000300       0x14 ./Code/main.o
+                0x00000300       0x14 ./main.o
                 0x00000300                __vector_default
  .text.__vector_21
-                0x00000314       0x7a ./Code/main.o
+                0x00000314       0x7a ./main.o
                 0x00000314                __vector_21
  .text.adc_init
-                0x0000038e       0x30 ./Code/main.o
+                0x0000038e       0x30 ./main.o
                 0x0000038e                adc_init
- .text.init_io  0x000003be       0x14 ./Code/main.o
+ .text.init_io  0x000003be       0x14 ./main.o
                 0x000003be                init_io
  .text.pwm_init
-                0x000003d2       0x3a ./Code/main.o
+                0x000003d2       0x3a ./main.o
                 0x000003d2                pwm_init
  .text.startup.main
-                0x0000040c      0x158 ./Code/main.o
+                0x0000040c      0x158 ./main.o
                 0x0000040c                main
  .text.init_moves
-                0x00000564       0x8e ./Code/moves.o
+                0x00000564       0x8e ./moves.o
                 0x00000564                init_moves
  .text.set_motors_dir
-                0x000005f2       0x36 ./Code/moves.o
+                0x000005f2       0x36 ./moves.o
                 0x000005f2                set_motors_dir
  .text.set_motors_vel
-                0x00000628       0x3c ./Code/moves.o
+                0x00000628       0x3c ./moves.o
                 0x00000628                set_motors_vel
  .text.invoke_move
-                0x00000664       0x22 ./Code/moves.o
+                0x00000664       0x22 ./moves.o
                 0x00000664                invoke_move
  .text.motor_soft_start
-                0x00000686        0x2 ./Code/moves.o
+                0x00000686        0x2 ./moves.o
                 0x00000686                motor_soft_start
  .text.sw_pressed
-                0x00000688       0x14 ./Code/sensors.o
+                0x00000688       0x14 ./sensors.o
                 0x00000688                sw_pressed
  .text.edge_detect
-                0x0000069c       0x38 ./Code/sensors.o
+                0x0000069c       0x38 ./sensors.o
                 0x0000069c                edge_detect
  .text.enemy_detect
-                0x000006d4       0x32 ./Code/sensors.o
+                0x000006d4       0x32 ./sensors.o
                 0x000006d4                enemy_detect
  .text.libgcc.mul
                 0x00000706        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_udivmodhi4.o)
@@ -424,12 +424,12 @@ END GROUP
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4/crtm88pa.o
- .data          0x00800100        0x0 ./Code/accelerometer/acceleroeter.o
- .data          0x00800100        0x0 ./Code/MKUART/mkuart.o
- .data          0x00800100        0x0 ./Code/I2C_TWI/i2c_twi.o
- .data          0x00800100        0x0 ./Code/main.o
- .data          0x00800100        0x0 ./Code/moves.o
- .data          0x00800100        0x0 ./Code/sensors.o
+ .data          0x00800100        0x0 ./accelerometer/acceleroeter.o
+ .data          0x00800100        0x0 ./MKUART/mkuart.o
+ .data          0x00800100        0x0 ./I2C_TWI/i2c_twi.o
+ .data          0x00800100        0x0 ./main.o
+ .data          0x00800100        0x0 ./moves.o
+ .data          0x00800100        0x0 ./sensors.o
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_udivmodhi4.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_exit.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_copy_data.o)
@@ -439,14 +439,14 @@ END GROUP
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(utoa_ncheck.o)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(strrev.o)
  *(.data*)
- .data.adc_mul  0x00800100        0x5 ./Code/main.o
+ .data.adc_mul  0x00800100        0x5 ./main.o
                 0x00800100                adc_mul
- .data.adc_mul  0x00800105        0x5 ./Code/moves.o
- .data.adc_mul  0x0080010a        0x5 ./Code/sensors.o
+ .data.adc_mul  0x00800105        0x5 ./moves.o
+ .data.adc_mul  0x0080010a        0x5 ./sensors.o
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x0080010f       0x62 ./Code/main.o
+                0x0080010f       0x62 ./main.o
                                  0x67 (size before relaxing)
  *(.gnu.linkonce.d*)
                 0x00800172                . = ALIGN (0x2)
@@ -458,12 +458,12 @@ END GROUP
                 0x00800172                PROVIDE (__bss_start, .)
  *(.bss)
  .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4/crtm88pa.o
- .bss           0x00800172        0x0 ./Code/accelerometer/acceleroeter.o
- .bss           0x00800172        0x0 ./Code/MKUART/mkuart.o
- .bss           0x00800172        0x0 ./Code/I2C_TWI/i2c_twi.o
- .bss           0x00800172        0x0 ./Code/main.o
- .bss           0x00800172        0x0 ./Code/moves.o
- .bss           0x00800172        0x0 ./Code/sensors.o
+ .bss           0x00800172        0x0 ./accelerometer/acceleroeter.o
+ .bss           0x00800172        0x0 ./MKUART/mkuart.o
+ .bss           0x00800172        0x0 ./I2C_TWI/i2c_twi.o
+ .bss           0x00800172        0x0 ./main.o
+ .bss           0x00800172        0x0 ./moves.o
+ .bss           0x00800172        0x0 ./sensors.o
  .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_udivmodhi4.o)
  .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_exit.o)
  .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/avr4\libgcc.a(_copy_data.o)
@@ -473,19 +473,19 @@ END GROUP
  .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(utoa_ncheck.o)
  .bss           0x00800172        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.8.1/../../../../avr/lib/avr4\libc.a(strrev.o)
  *(.bss*)
- .bss.k.1972    0x00800172        0x1 ./Code/main.o
+ .bss.k.1972    0x00800172        0x1 ./main.o
  *(COMMON)
- COMMON         0x00800173       0x34 ./Code/MKUART/mkuart.o
+ COMMON         0x00800173       0x34 ./MKUART/mkuart.o
                 0x00800173                UART_TxHead
                 0x00800174                UART_TxTail
                 0x00800175                UART_TxBuf
                 0x00800185                UART_RxHead
                 0x00800186                UART_RxTail
                 0x00800187                UART_RxBuf
- COMMON         0x008001a7        0xd ./Code/main.o
+ COMMON         0x008001a7        0xd ./main.o
                 0x008001a7                tccrt
                 0x008001b1                sharp
- COMMON         0x008001b4       0x20 ./Code/moves.o
+ COMMON         0x008001b4       0x20 ./moves.o
                 0x008001b4                moves
                 0x008001d4                PROVIDE (__bss_end, .)
                 0x000007ac                __data_load_start = LOADADDR (.data)
@@ -537,13 +537,13 @@ END GROUP
 
 .comment        0x00000000       0x30
  *(.comment)
- .comment       0x00000000       0x30 ./Code/accelerometer/acceleroeter.o
+ .comment       0x00000000       0x30 ./accelerometer/acceleroeter.o
                                  0x31 (size before relaxing)
- .comment       0x00000000       0x31 ./Code/MKUART/mkuart.o
- .comment       0x00000000       0x31 ./Code/I2C_TWI/i2c_twi.o
- .comment       0x00000000       0x31 ./Code/main.o
- .comment       0x00000000       0x31 ./Code/moves.o
- .comment       0x00000000       0x31 ./Code/sensors.o
+ .comment       0x00000000       0x31 ./MKUART/mkuart.o
+ .comment       0x00000000       0x31 ./I2C_TWI/i2c_twi.o
+ .comment       0x00000000       0x31 ./main.o
+ .comment       0x00000000       0x31 ./moves.o
+ .comment       0x00000000       0x31 ./sensors.o
 
 .note.gnu.build-id
  *(.note.gnu.build-id)

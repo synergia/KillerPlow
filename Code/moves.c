@@ -2,7 +2,7 @@
  * moves.c
  *
  *  Created on: Dec 8, 2016
- *       Autor:
+ *       Autors: DefaultMan & Frozen
  *
  */
 #include "moves.h"

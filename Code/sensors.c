@@ -2,7 +2,7 @@
  * sensors.c
  *
  *  Created on: 9 gru 2016
- *      Author: Mrozi
+ *      Authors: DefaultMan & Frozen
  */
 
 #ifndef SENSORS_C_

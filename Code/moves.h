@@ -2,7 +2,7 @@
  * moves.h
  *
  *  Created on: Dec 8, 2016
- *       Autor:
+ *       Authors: DefaultMan & Frozen
  */
 
 #ifndef MOVES_H_

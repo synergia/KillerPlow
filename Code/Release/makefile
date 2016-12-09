@@ -8,14 +8,9 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include Code/accelerometer/subdir.mk
--include Code/Release/accelerometer/subdir.mk
--include Code/Release/MKUART/subdir.mk
--include Code/Release/I2C_TWI/subdir.mk
--include Code/Release/subdir.mk
--include Code/MKUART/subdir.mk
--include Code/I2C_TWI/subdir.mk
--include Code/subdir.mk
+-include accelerometer/subdir.mk
+-include MKUART/subdir.mk
+-include I2C_TWI/subdir.mk
 -include subdir.mk
 -include objects.mk
 

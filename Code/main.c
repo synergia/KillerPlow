@@ -136,15 +136,11 @@ void init_io(void) {
 
 	DDRB = 0b00100111;
 	DDRC = 0b00000000;
-	DDRD = 0b11100000; //to check`
+	DDRD = 0b11100000;
 
-	//PWM
-	//TCCR1A |= (1 << COM1A1) | (1 << COM1B1) | (1 << WGM10);//to check
-	//TCCR1B |= (1 << CS10) | (1 << WGM12);//to check
-	//Interrupts
-	//PCMSK0 |= (1 <<PCINT0) | (1 <<PCINT1) | (1 <<PCINT2);//wrong, has to be changed
-	//PCICR |= (1 << SH_L) | (1 << SH_F) | (1 << SH_R);//to check
-
+	/*Pullup on SHARPs input*/
+	PINB |= SH_L | SH_F;
+	PIND |= SH_R;
 }
 
 void pwm_init() {

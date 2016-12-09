@@ -21,12 +21,8 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-Code/I2C_TWI \
-Code/MKUART \
-Code/Release/I2C_TWI \
-Code/Release/MKUART \
-Code/Release/accelerometer \
-Code/Release \
-Code/accelerometer \
-Code \
+I2C_TWI \
+MKUART \
+accelerometer \
+. \
 

@@ -2,7 +2,7 @@
  * defines.h
  *
  *  Created on: Dec 8, 2016
- *       Autor: Miros³aw Kardaœ
+ *       Authors: DefaultMan & Frozen
  */
 
 #ifndef DEFINES_H_
