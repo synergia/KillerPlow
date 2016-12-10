@@ -27,6 +27,8 @@
 void init_io(void);
 void adc_init();
 void pwm_init();
+void tim_init();
+
 //void tim_init();
 volatile int counter = 0;
 int main() {
@@ -34,19 +36,25 @@ int main() {
 	USART_Init(__UBRR);
 	adc_init();
 	pwm_init();
-	//tim_init();
+	tim_init();
+
 	sei();
 
 	while (!sw_pressed()) {
-		ADCSRA |= (1 << ADSC);
-		PORTB ^= LED_PIN;
-		_delay_ms(100);
+		//	ADCSRA |= (1 << ADSC);
+//		PORTB ^= LED_PIN;
+//		_delay_ms(100);
+		if (edge_detect()) {
+			LED_ON;
+		} else {
+			LED_OFF;
+		}
 	};
 	LED_OFF;
 	_delay_ms(3000);
 	start_move(left);
 	while (1) {
-		ADCSRA |= (1 << ADSC);
+		//	ADCSRA |= (1 << ADSC);
 		attack_enemy();
 		run_from_edge();
 
@@ -124,17 +132,24 @@ ISR(ADC_vect) {
 	_delay_us(150); //there must be 13 ADC clock (84us) gap between ADMUX update and ADSC
 }
 
-ISR(TIMER0_COMPB_vect) {
+ISR(TIMER0_COMPA_vect) {
+	static uint16_t x;
+	++x;
+	if (x >= 1000) {
+	//	PORTB ^= LED_PIN;
+		x = 0;
+	}
 }
 
 void adc_init() {
 	//	ADCSRA |=
 	//pres = 128 , interrupt enable enable
 	ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) | (1 << ADCSRA);
-	ADCSRA |= (1 << ADEN) | (1 << ADIE); //ADSC
+	ADCSRA |= (1 << ADEN) | (1 << ADIE) | (1 << ADATE); //ADSC
 	ADMUX = (1 << REFS0);
+	ADCSRB |= (1 << ADTS1) | (1 << ADTS0);
 	_delay_us(250);
-	ADCSRA |= (1 << ADSC);
+//	ADCSRA |= (1 << ADSC);
 	for (uint8_t i = 0; i <= 4; ++i) {
 		tccrt[i] = 1023;
 	}
@@ -153,7 +168,7 @@ void tim_init() {
 	TCCR0B |= (1 << CS02) | (1 << CS00); //CLK, 1024 prescaler
 	TCNT0 = 0;
 	TIMSK0 |= (1 << OCIE0A); //enable interrupts
-	OCR0A = 195;
+	OCR0A = 19; //1ms interrupt
 }
 
 void pwm_init() {
