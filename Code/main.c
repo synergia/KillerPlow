@@ -36,8 +36,6 @@ int main() {
 	pwm_init();
 	//tim_init();
 	sei();
-	motors.Mot_A_vel = 80;
-	motors.Mot_B_vel = 80;
 
 	while (!sw_pressed()) {
 		ADCSRA |= (1 << ADSC);
@@ -46,12 +44,12 @@ int main() {
 	};
 	LED_OFF;
 	_delay_ms(3000);
-	//start_move(left);
+	start_move(left);
 	while (1) {
 		ADCSRA |= (1 << ADSC);
-
-		run_from_edge();
 		attack_enemy();
+		run_from_edge();
+
 		set_motors_dir(motors.Mot_dir);
 		set_motors_vel(motors.Mot_A_vel, motors.Mot_B_vel);
 //		if (uart_getc() == 'w') {

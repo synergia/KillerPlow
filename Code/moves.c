@@ -137,10 +137,6 @@ void attack_enemy() {
 		motors.Mot_dir = right;
 		motors.Mot_A_vel = 80;
 		motors.Mot_B_vel = 80;
-	} else {
-		motors.Mot_dir = breaking;
-		motors.Mot_A_vel = 0;
-		motors.Mot_B_vel = 0;
 	}
 }
 
@@ -155,7 +151,7 @@ void run_from_edge() {
 void start_move(directions dir) {
 	set_motors_dir(backward);
 	set_motors_vel(80, 80);
-	_delay_ms(200);
+	_delay_ms(125);
 	if (dir == left)
 		set_motors_dir(left);
 	else
