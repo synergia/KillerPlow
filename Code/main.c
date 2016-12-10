@@ -30,7 +30,11 @@ void pwm_init();
 void tim_init();
 
 //void tim_init();
-volatile int counter = 0;
+volatile uint8_t counter = 0;
+uint8_t time_0 = 0;
+uint8_t enemy_spotted = 0;
+volatile uint8_t counter_2 = 0;
+
 int main() {
 	init_io();
 	USART_Init(__UBRR);
@@ -41,22 +45,31 @@ int main() {
 	sei();
 
 	while (!sw_pressed()) {
-		//	ADCSRA |= (1 << ADSC);
-//		PORTB ^= LED_PIN;
-//		_delay_ms(100);
-		if (edge_detect()) {
-			LED_ON;
-		} else {
-			LED_OFF;
-		}
+
 	};
 	LED_OFF;
 	_delay_ms(3000);
 	start_move(left);
 	while (1) {
 		//	ADCSRA |= (1 << ADSC);
-		attack_enemy();
-		run_from_edge();
+		//search_enemy();
+		//run_from_edge();
+
+		if( counter_2 >= 10 ){
+			search_enemy();
+			counter_2=0;
+		}
+
+		if (edge_detect())
+			go_to_midle_of_dojo();
+		if (time_0 == 1) {
+			if (counter >= 9) {
+				time_0 = 0;
+				start_spin();
+				counter = 0;
+			}
+		}
+		//attack_enemy();
 
 		set_motors_dir(motors.Mot_dir);
 		set_motors_vel(motors.Mot_A_vel, motors.Mot_B_vel);
@@ -134,9 +147,26 @@ ISR(ADC_vect) {
 
 ISR(TIMER0_COMPA_vect) {
 	static uint16_t x;
-	++x;
-	if (x >= 1000) {
-	//	PORTB ^= LED_PIN;
+	static uint8_t y;
+	if (!enemy_spotted)
+		++y;
+	else {
+		y = 0;
+	}
+	if (y >= 100) {
+		++counter_2;
+		//	PORTB ^= LED_PIN;
+		y = 0;
+	}
+
+	if (time_0)
+		++x;
+	else {
+		x = 0;
+	}
+	if (x >= 100) {
+		++counter;
+		//	PORTB ^= LED_PIN;
 		x = 0;
 	}
 }

@@ -129,14 +129,21 @@ void attack_enemy() {
 		motors.Mot_dir = forward;
 		motors.Mot_A_vel = 90;
 		motors.Mot_B_vel = 90;
+		enemy_spotted=1;
 	} else if (!(PINB & SH_L)) { //left
 		motors.Mot_dir = left;
 		motors.Mot_A_vel = 80;
 		motors.Mot_B_vel = 80;
+		enemy_spotted=1;
+
 	} else if (!(PIND & SH_R)) { //right
 		motors.Mot_dir = right;
 		motors.Mot_A_vel = 80;
 		motors.Mot_B_vel = 80;
+		enemy_spotted=1;
+	}
+	else{
+		enemy_spotted=0;
 	}
 }
 
@@ -152,9 +159,43 @@ void start_move(directions dir) {
 	set_motors_dir(backward);
 	set_motors_vel(80, 80);
 	_delay_ms(125);
-	if (dir == left)
-		set_motors_dir(left);
-	else
-		set_motors_dir(right);
+	set_motors_dir(right);
 	set_motors_vel(80, 80);
+}
+
+void search_enemy() {
+	motors.Mot_dir = forward;
+	motors.Mot_A_vel = 70;
+	motors.Mot_B_vel = 70;
+}
+
+void go_to_midle_of_dojo() {
+	if (tccrt[0] <= wb_treshold || tccrt[2] <= wb_treshold) {
+		motors.Mot_dir = right;
+		motors.Mot_A_vel = 65;
+		motors.Mot_B_vel = 65;
+	}
+	if (tccrt[1] <= wb_treshold || tccrt[3] <= wb_treshold) {
+		motors.Mot_dir = left;
+		motors.Mot_A_vel = 65;
+		motors.Mot_B_vel = 65;
+	}
+	if (tccrt[0] <= wb_treshold || tccrt[3] <= wb_treshold) {
+		motors.Mot_dir = forward;
+		motors.Mot_A_vel = 75;
+		motors.Mot_B_vel = 75;
+		time_0 =1;
+	}
+	if (tccrt[1] <= wb_treshold || tccrt[2] <= wb_treshold) {
+		motors.Mot_dir = backward;
+		motors.Mot_A_vel = 75;
+		motors.Mot_B_vel = 75;
+		time_0 =1;
+	}
+
+}
+void start_spin() {
+motors.Mot_dir = right;
+motors.Mot_A_vel = 80;
+motors.Mot_B_vel = 80;
 }

@@ -40,5 +40,8 @@ void motor_soft_start(int MA_start_val, int MA_end_val, int MB_start_val,
 void attack_enemy();
 void run_from_edge();
 void start_move(directions dir);
+void search_enemy();
+void go_to_midle_of_dojo();
+void start_spin();
 
 #endif /* MOVES_H_ */
